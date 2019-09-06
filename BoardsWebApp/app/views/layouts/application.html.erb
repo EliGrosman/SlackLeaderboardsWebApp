@@ -1,15 +1,27 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>BoardsWebApp</title>
+    <title>Slackboards</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <meta charset="utf-8">
 
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
-  </head>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
 
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    </head>
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
   <body>
     <%= yield %>
   </body>
+<footer class="page-footer font-small blue pt-4">
+  <div class="footer-copyright text-center py-1">Developed by Eli Grosman (uw19)
+  </div>
+  <div class="footer-copyright text-center">Found a bug? Email
+    <a href="mailto:eligrosman1@gmail.com"> eligrosman1@gmail.com </a>
+  </div>
+</footer>
 </html>

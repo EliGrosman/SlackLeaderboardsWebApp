@@ -1,0 +1,58 @@
+<header class="masthead bg-primary text-white text-center">
+
+    <div class="container d-flex align-items-center flex-column">
+
+      <h1 class="masthead-heading text-uppercase mb-0"><%= @board.board_name %></h1>
+
+      <div class="divider-custom divider-light">
+        <div class="divider-custom-line"></div>
+      </div>
+    </div>
+  </header>
+        <section class="page-section" id="buttons">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+              <% flash.each do |message_type, message| %>
+        <div class="alert alert-<%= message_type %>"><%= message %></div>
+        <% end %>
+        <% if @matches.blank? %>
+        <h3>There are currently no matches reported on this board</h3>
+        <% else %>
+        <h3>Matches for <%= @board.board_name %></h3>
+  <table class="table">    
+        <thead>
+          <tr>
+            <th>Winner</th>
+            <th>Loser</th>
+            <th>Score</th>
+          </tr>
+        </thead>    
+        <tbody>
+          <% @matches.each do |match| %>
+            <tr>
+              <% if @board.elo_enabled %>
+                <% if match.winner_elo_change >= 0 %>
+                  <td><%= match.winner + "/+" + match.winner_elo_change.to_s + " elo" %> </td>
+                <% else match.winner_elo_change < 0 %>
+                  <td><%= match.winner + "/" + match.winner_elo_change.to_s + " elo" %> </td>
+                <% end %>
+                <% if match.loser_elo_change >= 0 %>
+                  <td><%= match.loser + "/+" + match.loser_elo_change.to_s + " elo" %> </td>
+                <% else match.loser_elo_change < 0 %>
+                  <td><%= match.loser + "/" + match.loser_elo_change.to_s + " elo" %> </td>
+                <% end %>
+              <% else %>
+                  <td><%= match.winner %> </td>
+                  <td><%= match.loser %> </td>
+              <% end %>
+              <td><%= match.score_pos.to_s + "-" + match.score_neg.to_s %></td>
+              <td><%= link_to 'Edit match', edit_match_path(match), class: "btn btn-primary btn-sm active" %></td>
+            </tr>
+          <% end %>
+        </tbody>
+        </table>
+        <% end %>
+        <br>
+            <%= link_to 'Back', root_path(), method: :get, class: "btn btn-primary btn-sm active" %>
+          </div>
+        </div>

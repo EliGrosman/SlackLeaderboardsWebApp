@@ -1,0 +1,53 @@
+<header class="masthead bg-primary text-white text-center">
+
+    <div class="container d-flex align-items-center flex-column">
+
+      <h1 class="masthead-heading text-uppercase mb-0">Slackboards Home</h1>
+
+      <div class="divider-custom divider-light">
+        <div class="divider-custom-line"></div>
+      </div>
+    </div>
+  </header>
+
+        <section class="page-section" id="buttons">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+              <% flash.each do |message_type, message| %>
+        <div class="alert alert-<%= message_type %>"><%= message %></div>
+        <% end %>
+        <h2>Boards breakdown:</h2>
+        <table class="table">    
+        <thead>
+          <tr>
+            <th>Board name</th>
+            <th>Elo enabled</th>
+            <th>Round-robin tournament</th>
+            <th>Number of matches</th>
+          </tr>
+        </thead>    
+        <tbody>
+          <% @boards.each do |board| %>
+            <tr>
+              <td><%= board.board_name %></td>
+              <% if board.elo_enabled %>
+                <td>Yes</td>
+              <% else %>
+                <td>No</td>
+              <% end %>
+              <% if board.rr_tournament %>
+                <td><%= link_to 'Manage tournament', manage_tournament_path(board), class: "btn btn-primary btn-sm active" %></td>
+              <% else %>
+                <td>No</td>
+              <% end %>
+              <td><%= board.count_matches||0 %></td>
+              <td><%= link_to 'Manage matches', match_path(board), class: "btn btn-primary btn-sm active" %></td>
+              <td><%= link_to 'View leaderboard', view_leaderboard_path(board), class: "btn btn-primary btn-sm active" %></td>
+              <td><%= link_to 'Delete board', delete_board_path(board), class: "btn btn-primary btn-sm active" %></td>
+            </tr>
+          <% end %>
+        </tbody>
+        </table>
+            <%= link_to 'New leaderboard', add_board_path(), method: :get, class: "btn btn-primary btn-sm active" %>
+          </div>
+        </div>

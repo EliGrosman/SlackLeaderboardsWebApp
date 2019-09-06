@@ -1,0 +1,55 @@
+<header class="masthead bg-primary text-white text-center">
+
+    <div class="container d-flex align-items-center flex-column">
+
+      <h1 class="masthead-heading text-uppercase mb-0"><%= @board.board_name %></h1>
+
+      <div class="divider-custom divider-light">
+        <div class="divider-custom-line"></div>
+      </div>
+    </div>
+  </header>
+
+        <section class="page-section" id="buttons">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+              <% flash.each do |message_type, message| %>
+        <div class="alert alert-<%= message_type %>"><%= message %></div>
+        <% end %>
+        <% if @players.blank? %>
+        <h3>No matches have been reported on this board </h3>
+        <% else %>
+        <h2>Leaderboard:</h2>
+        <table class="table">    
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Player</th>
+            <th>Wins</th>
+            <th>Losses</th>
+            <% if @board.elo_enabled %>
+            <th>Elo</th>
+            <% end %>
+          </tr>
+        </thead>    
+        <tbody>
+        <% i = 1 %>
+          <% @players.each do |player| %>
+            <tr>
+              <td><%= i %>
+              <td><%= player[0] %></td>
+              <td><%= player[1] %></td>
+              <td><%= player[2]%></td>
+              <% if @board.elo_enabled %>
+                <td><%= player[3]||0 %></td>
+              <% end %>
+            </tr>
+            <% i += 1 %>
+          <% end %>
+        </tbody>
+        </table>
+        <% end %>
+        <br>
+            <%= link_to 'Back', root_path(), method: :get, class: "btn btn-primary btn-sm active" %>
+          </div>
+        </div>

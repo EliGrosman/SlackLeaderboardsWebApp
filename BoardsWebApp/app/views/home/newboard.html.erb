@@ -1,0 +1,33 @@
+<header class="masthead bg-primary text-white text-center">
+
+    <div class="container d-flex align-items-center flex-column">
+
+      <h1 class="masthead-heading text-uppercase mb-0">New board</h1>
+
+      <div class="divider-custom divider-light">
+        <div class="divider-custom-line"></div>
+      </div>
+    </div>
+  </header>
+<br>
+  <div class="row">
+<div class="col-lg-8 mx-auto">
+      <% flash.each do |message_type, message| %>
+        <div class="alert alert-<%= message_type %>"><%= message %></div>
+      <% end %>
+      <%= form_tag :action => 'createboard' do %>
+        <p><label for = "board_name">Board Name</label>
+        <%= text_field  'board', 'board_name' %></p>
+
+        <p><label for = "board_elo">Enable Elo</label>
+        <%= check_box  'board', 'elo_enabled' %></p>
+
+        <p><label for = "board_rrtournament">Enable Round-Robin Tournament</label>
+        <%= check_box  'board', 'rr_tournament' %></p>
+      <%= submit_tag "Create Board", class: "btn btn-primary btn-sm active" %>
+      <% end %>
+<br>
+
+<%= link_to 'Back', root_path(), method: :get, class: "btn btn-primary btn-sm active" %>
+</div>
+</div>
