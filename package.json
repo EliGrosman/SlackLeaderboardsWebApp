@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "description": "A leaderboards bot for slack",
-  "main": "server.js",
+  "main": "./BoardsBot/server.js",
   "scripts": {
     "start": "node -r dotenv/config server",
     "test": "echo \"Error: no test specified\" && exit 1"

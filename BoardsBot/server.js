@@ -10,7 +10,7 @@ const app = express();
 const tourney = require('./tourney.js');
 
 var fs = require('fs');
-var dbFile = './data/database.db';
+var dbFile = 'data/database.db';
 var exists = fs.existsSync(dbFile);
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database(dbFile);
@@ -464,5 +464,4 @@ const openRVPPointDialog = (payload, real_name) => {
 
 const server = app.listen(process.env.PORT || 5000, () => {
    console.log('Express server listening on port %d in %s mode', server.address().port, app.settings.env);
-   console.log(process.env.SLACK_ACCESS_TOKEN)
 });
