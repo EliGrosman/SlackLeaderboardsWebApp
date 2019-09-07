@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_06_201812) do
+ActiveRecord::Schema.define(version: 2019_09_07_202601) do
 
-  create_table "Test", id: false, force: :cascade do |t|
+  create_table "Ultimate", id: false, force: :cascade do |t|
     t.string "player", limit: 50, null: false
     t.integer "wins"
     t.integer "losses"
@@ -33,6 +33,8 @@ ActiveRecord::Schema.define(version: 2019_09_06_201812) do
     t.integer "board_id"
     t.string "winner"
     t.string "loser"
+    t.integer "score_pos"
+    t.integer "score_neg"
     t.integer "winner_elo_change"
     t.integer "loser_elo_change"
     t.index ["board_id"], name: "index_matches_on_board_id"

@@ -1,0 +1,40 @@
+<header class="masthead bg-primary text-white text-center">
+
+    <div class="container d-flex align-items-center flex-column">
+
+      <h1 class="masthead-heading text-uppercase mb-0">Edit Match</h1>
+
+      <div class="divider-custom divider-light">
+        <div class="divider-custom-line"></div>
+      </div>
+    </div>
+  </header>
+  <div class="row">
+<div class="col-lg-8 mx-auto">
+      <% flash.each do |message_type, message| %>
+        <div class="alert alert-<%= message_type %>"><%= message %></div>
+      <% end %>
+      <br>
+<%= form_for @match, :url => {:action => "update", :id => @match} do |f| %>
+
+  <p><label for = "match_winner">Winner</label>
+  <%= f.text_field  'winner', :disabled => true %></p>
+
+  <p><label for = "match_loser">Loser</label>
+  <%= f.text_field  'loser', :disabled => true %></p>
+
+  <p><label for = "match_score_pos">Winner's Score</label>
+  <%= f.text_field  'score_pos' %></p>
+
+  <p><label for = "match_score_neg">Loser's Score</label>
+  <%= f.text_field  'score_neg' %></p>
+
+<%= f.submit "Update Match", class: "btn btn-primary btn-sm active" %>
+<% end %>
+<br>
+<%= button_to "Delete Match", {:controller => :home, :action => "destroy"}, :method => :delete, class: "btn btn-primary btn-sm active" %>
+<br>
+<%= link_to 'Back', match_path(@match.board), method: :get, class: "btn btn-primary btn-sm active" %>
+
+</div>
+</div>

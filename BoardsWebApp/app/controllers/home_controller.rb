@@ -36,7 +36,7 @@ class HomeController < ApplicationController
   
   def show
     @board = Board.find(params[:id])
-    @matches = Match.where(board: @board)
+    @matches = Match.where(board: @board).order('created_at DESC')
   end
 
   def deleteboard
@@ -74,8 +74,35 @@ class HomeController < ApplicationController
     @match = Match.find(params[:id])
   end
 
+  def update
+    @match = Match.find(params[:id])
+    if (@match.update(match_params))
+      flash[:success] = "Match was updated successfully"
+      redirect_to match_path(@match.board)
+    else
+      flash.now[:danger] = "Could not update match"
+      redirect_to edit_match_path(@match)
+    end
+  end
+
+  def destroy
+    @match = Match.find(params[:id])
+    @board = @match.board
+    if @match.destroy
+      flash[:success] = "Match was deleted successfully"
+      redirect_to match_path(@board)
+    else
+      flash.now[:danger] = "Could not update match"
+      redirect_to edit_match_path(@match)
+    end
+  end
+
   private
     def board_params
       params.require(:board).permit(:board_name, :elo_enabled, :rr_tournament)
+    end
+
+    def match_params
+      params.require(:match).permit(:winner, :loser, :score_pos, :score_neg)
     end
 end
