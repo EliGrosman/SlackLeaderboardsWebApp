@@ -1,0 +1,2 @@
+class SlackBotController < ApplicationController
+end

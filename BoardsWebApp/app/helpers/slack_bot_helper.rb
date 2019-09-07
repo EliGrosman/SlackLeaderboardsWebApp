@@ -1,0 +1,2 @@
+module SlackBotHelper
+end
