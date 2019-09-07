@@ -23,7 +23,13 @@
         <thead>
           <tr>
             <th>Winner</th>
+            <% if @board.elo_enabled %>
+              <th>Change in elo</th>
+            <% end %>
             <th>Loser</th>
+            <% if @board.elo_enabled %>
+              <th>Change in elo</th>
+            <% end %>
             <th>Score</th>
           </tr>
         </thead>    
@@ -32,14 +38,18 @@
             <tr>
               <% if @board.elo_enabled %>
                 <% if match.winner_elo_change >= 0 %>
-                  <td><%= match.winner + "/+" + match.winner_elo_change.to_s + " elo" %> </td>
+                  <td><%= match.winner %> </td>
+                  <td>+<%= match.winner_elo_change %></td>
                 <% else match.winner_elo_change < 0 %>
-                  <td><%= match.winner + "/" + match.winner_elo_change.to_s + " elo" %> </td>
+                  <td><%= match.winner %> </td>
+                  <td><%= match.winner_elo_change %></td>
                 <% end %>
                 <% if match.loser_elo_change >= 0 %>
-                  <td><%= match.loser + "/+" + match.loser_elo_change.to_s + " elo" %> </td>
+                  <td><%= match.loser %> </td>
+                  <td>+<%= match.loser_elo_change %></td>
                 <% else match.loser_elo_change < 0 %>
-                  <td><%= match.loser + "/" + match.loser_elo_change.to_s + " elo" %> </td>
+                  <td><%= match.loser %> </td>
+                  <td><%= match.loser_elo_change %></td>
                 <% end %>
               <% else %>
                   <td><%= match.winner %> </td>
