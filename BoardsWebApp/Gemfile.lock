@@ -238,6 +238,7 @@ DEPENDENCIES
   byebug
   capybara (>= 2.15)
   dotenv-rails
+  execjs
   font-awesome-sass (~> 5.9.0)
   httparty
   jbuilder (~> 2.7)

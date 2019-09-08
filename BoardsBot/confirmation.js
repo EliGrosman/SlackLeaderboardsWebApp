@@ -7,8 +7,8 @@ const users = require('./users');
 const apiUrl = 'https://slack.com/api';
 const fs = require('fs');
 const tourney = require('./tourney');
-const slackapi = require('simple-slack-api')
 
+const slackapi = require('simple-slack-api')
 const slack = new slackapi(process.env.SLACK_ACCESS_TOKEN, process.env.SLACK_SIGNING_SECRET, process.env.SLACK_VERIFICATION_TOKEN)
 
 

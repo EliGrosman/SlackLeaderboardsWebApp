@@ -9,5 +9,5 @@ Rails.application.routes.draw do
   get '/deleteboard/:id', to: 'home#deleteboard', as: 'delete_board'
   patch '/match/:id', to: 'home#update', as: 'update_match'
   delete '/match/:id', to: 'home#destroy', as: 'delete_match'
-  get '/test', to: 'slack_bot#create'
+  post '/report', to: 'commands#report'
 end

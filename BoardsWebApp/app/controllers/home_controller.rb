@@ -1,7 +1,7 @@
 class HomeController < ApplicationController
 
   def index
-    @boards = Board.left_outer_joins(:match).group(:board_name).select("boards.id, boards.board_name, boards.elo_enabled, boards.rr_tournament, COALESCE(COUNT(matches.winner), 0) AS count_matches").order("count_matches DESC")
+    @boards = Board.left_outer_joins(:match).group(:board_name, :id, :elo_enabled, :rr_tournament).select("boards.id, boards.board_name, boards.elo_enabled, boards.rr_tournament, COALESCE(COUNT(matches.winner), 0) AS count_matches").order("count_matches DESC")
   end
 
   def newboard
@@ -12,7 +12,7 @@ class HomeController < ApplicationController
     @board = Board.new(board_params)
     begin
       ActiveRecord::Base.transaction do
-      sql = "CREATE TABLE '" + board_params[:board_name] + "' (player varchar(50) NOT NULL, wins INT, losses INT"
+      sql = "CREATE TABLE " + board_params[:board_name] + " (player varchar(50) NOT NULL, wins INT, losses INT"
       if(board_params[:elo_enabled]) 
         sql += ", elo INT"
       end
@@ -44,7 +44,7 @@ class HomeController < ApplicationController
     @matches = Match.where(board: @board)
     begin 
       ActiveRecord::Base.transaction do
-        sql = "DROP TABLE " + @board.board_name
+        sql = "DROP TABLE '" + @board.board_name + "'"
         ActiveRecord::Base.connection.execute(sql)
         if @board.destroy && @matches.delete_all
           flash[:success] = "Board was deleted successfully"
@@ -64,9 +64,9 @@ class HomeController < ApplicationController
   def viewleaderboard
     @board = Board.find(params[:id])
     if(@board.elo_enabled)
-      @players = ActiveRecord::Base.connection.execute('SELECT * FROM ' + @board.board_name + ' ORDER BY elo DESC')
+      @players = ActiveRecord::Base.connection.execute("SELECT * FROM '" + @board.board_name + "' ORDER BY elo DESC")
     else
-      @players = ActiveRecord::Base.connection.execute('SELECT * FROM ' + @board.board_name + ' ORDER BY (wins-losses) DESC')
+      @players = ActiveRecord::Base.connection.execute("SELECT * FROM '" + @board.board_name + "' ORDER BY (wins-losses) DESC")
     end
   end
 
