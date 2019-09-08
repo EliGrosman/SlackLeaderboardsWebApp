@@ -12,9 +12,9 @@ skip_before_action :verify_authenticity_token
     end
 
     if(@board.elo_enabled)
-      @leaderboard = ActiveRecord::Base.connection.execute("SELECT * FROM " + @board.board_name + " ORDER BY elo DESC")
+      @leaderboard = ActiveRecord::Base.connection.execute(ActiveRecord::Base::sanitize_sql(["SELECT * FROM ? ORDER BY elo DESC", @board.board_name]))
     else
-      @leaderboard = ActiveRecord::Base.connection.execute("SELECT * FROM " + @board.board_name + " ORDER BY (wins-losses) DESC")
+      @leaderboard = ActiveRecord::Base.connection.execute(ActiveRecord::Base::sanitize_sql(["SELECT * FROM ? ORDER BY (wins-losses) DESC", @board.board_name]))
     end
     if @match.save
       render json: @leaderboard, :status => :created

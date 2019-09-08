@@ -12,7 +12,7 @@ class HomeController < ApplicationController
     @board = Board.new(board_params)
     begin
       ActiveRecord::Base.transaction do
-      sql = "CREATE TABLE " + board_params[:board_name] + " (player varchar(50) NOT NULL, wins INT, losses INT"
+      sql = ActiveRecord::Base::sanitize_sql(["CREATE TABLE ? (player varchar(50) NOT NULL, wins INT, losses INT", board_params[:board_name]])
       if(board_params[:elo_enabled]) 
         sql += ", elo INT"
       end
@@ -44,7 +44,7 @@ class HomeController < ApplicationController
     @matches = Match.where(board: @board)
     begin 
       ActiveRecord::Base.transaction do
-        sql = "DROP TABLE '" + @board.board_name + "'"
+        sql = ActiveRecord::Base::sanitize_sql(["DROP TABLE ?", @board.board_name])
         ActiveRecord::Base.connection.execute(sql)
         if @board.destroy && @matches.delete_all
           flash[:success] = "Board was deleted successfully"
@@ -64,9 +64,9 @@ class HomeController < ApplicationController
   def viewleaderboard
     @board = Board.find(params[:id])
     if(@board.elo_enabled)
-      @players = ActiveRecord::Base.connection.execute("SELECT * FROM '" + @board.board_name + "' ORDER BY elo DESC")
+      @players = ActiveRecord::Base.connection.execute(ActiveRecord::Base::sanitize_sql(["SELECT * FROM ? ORDER BY elo DESC", @board.board_name]))
     else
-      @players = ActiveRecord::Base.connection.execute("SELECT * FROM '" + @board.board_name + "' ORDER BY (wins-losses) DESC")
+      @players = ActiveRecord::Base.connection.execute(ActiveRecord::Base::sanitize_sql(["SELECT * FROM ? ORDER BY (wins-losses) DESC", @board.board_name]))
     end
   end
 
