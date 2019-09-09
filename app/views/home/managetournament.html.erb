@@ -1,0 +1,65 @@
+<header class="masthead bg-primary text-white text-center">
+
+    <div class="container d-flex align-items-center flex-column">
+
+      <h1 class="masthead-heading text-uppercase mb-0"><%= @board.board_name %></h1>
+
+      <div class="divider-custom divider-light">
+        <div class="divider-custom-line"></div>
+      </div>
+    </div>
+  </header>
+  <div class="row">
+<div class="col-lg-8 mx-auto">
+<% if (@matches.empty?) %>
+<%= form_for @board, :url => {:action => "createtournament", :id => @board} do |f| %>
+    <br />
+    <div id="header"> 
+      How many times should a player face each player?
+      <input type="text" name="numGames" onkeypress='validate(event)'><br><br>
+      Is the tournament seeded? (If checked, the order of players below will determine the seeding. If not, the players below will be randomized.)
+      <input type="checkbox" name="seeded"><br><br>
+       Players in the tournament:
+      <%= submit_tag "Add player", :type => 'button', :onclick => 'addPersonField()', class: "btn btn-primary btn-sm active" %>
+    </div>
+    
+    <br />
+    <ul id="playerList">
+    </ul>
+    <div class="actions">
+        <%= f.submit "Create Tournament" , class: "btn btn-primary btn-sm active"%>
+    </div>    
+  <% end %>
+    <% else %>
+<% @rounds.each do |round| %>
+<h2>Round <%= round.round %></h2>
+        <table class="table">    
+        <thead>
+          <tr>
+            <th>Matchup</th>
+            <th>Completed</th>
+          </tr>
+        </thead>    
+        <tbody>
+          <% @matches.each do |match| %>
+            <% if(match.round == round.round) %>
+            <tr>
+              <td><%= Slackapi.getRealName(match.player1)||match.player1 %> vs. <%= Slackapi.getRealName(match.player2)||match.player2 %></td>
+              <% if match.completed %>
+                <td>Yes</td>
+              <% else %>
+                <td>No</td>
+              <% end %>
+            </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+        </table>
+<% end %>
+    <% end %>
+  <br>
+
+  <%= link_to 'Back', root_path, method: :get, class: "btn btn-primary btn-sm active" %>
+
+  </div>
+  </div>

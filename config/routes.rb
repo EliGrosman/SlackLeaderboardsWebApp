@@ -12,4 +12,5 @@ Rails.application.routes.draw do
   post '/report', to: 'commands#report'
   get '/getboards', to: 'commands#getboards'
   get '/leaderboard', to: 'commands#leaderboard'
+  patch '/tournament/:id', to: 'home#createtournament', as: 'create_tournament'
 end

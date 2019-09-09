@@ -97,6 +97,81 @@ class HomeController < ApplicationController
     end
   end
 
+  def managetournament
+    @board = Board.where(id: params[:id]).first
+    if(@board.nil? || !@board.rr_tournament) 
+      flash[:danger] = "Tournament not found"
+      redirect_to root_path
+    else
+      @matches = TournamentMatch.where(board: @board).order("round ASC")
+      @rounds = TournamentMatch.where(board: @board).group(:round).order("round ASC").select(:round)
+    end
+  end
+
+  def createtournament
+    players = Hash.new
+    seeded = params[:seeded]
+    numGames = params[:numGames]
+    params.each do |id, attrs|
+      if(id.starts_with?('player'))
+        players[id] = attrs
+      end
+    end
+
+    q1 = Queue.new
+    q2 = Queue.new
+    if(players.size % 2 != 0) 
+      players["player" + players.size.to_s] = "Bye"
+    end
+    if(!seeded.nil?)
+      puts "not seeded"
+      players = Hash[players.to_a.shuffle]
+    end
+
+    for i in 0..(players.size/2)-1
+      q1 << players["player" + i.to_s]
+    end
+
+    for i in players.size/2..players.size-1
+      q2 << Hash[players.to_a.reverse]["player" + i.to_s]
+    end
+
+    generateTourneyRounds(q1, q2, numGames.to_i, Board.find(params[:id]))
+
+    flash[:success] = players.to_json
+    redirect_to root_path
+  end
+
+  def generateTourneyRounds(q1, q2, n, board)
+    for x in 1..n
+      for y in 1..(q1.size + q2.size)-1
+        puts "Week " + x.to_s + " Round " + y.to_s
+        temp1 = Queue.new
+        temp2 = Queue.new
+        for i in 0..q1.size-1
+          p1 = q1.pop
+          p2 = q2.pop
+          temp1 << p1
+          temp2 << p2
+          puts p1.to_s + " v. " + p2.to_s
+          if (p1 != "Bye" && p2 != "Bye")
+            TournamentMatch.create!(player1: p1, player2: p2, completed: false, board: board, round: x)
+          end
+        end
+        q1 << temp1.pop
+        q1 << temp2.pop
+        for i in 0..temp2.size-2
+          q1 << temp1.pop
+          q2 << temp2.pop
+        end
+        q2 << temp2.pop
+        q2 << temp1.pop
+      end
+      q2 << q1.pop
+      q1 << q2.pop
+    end
+  end
+
   private
     def board_params
       params.require(:board).permit(:board_name, :elo_enabled, :rr_tournament)
@@ -105,4 +180,5 @@ class HomeController < ApplicationController
     def match_params
       params.require(:match).permit(:winner, :loser, :score_pos, :score_neg)
     end
+
 end
