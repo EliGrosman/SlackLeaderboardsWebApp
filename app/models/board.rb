@@ -2,7 +2,7 @@ class Board < ApplicationRecord
   has_many :match
   has_many :tournament_match
 
-  before_delete {
+  before_destroy {
     TournamentMatch.where(board: self).delete_all
   }
 end
