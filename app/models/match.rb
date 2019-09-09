@@ -1,7 +1,7 @@
 class Match < ApplicationRecord
   @T1 = @T2 = @E1 = @E2 = 0
   belongs_to :board
-
+  belongs_to :tournament_match, optional: true
   before_create {
     con = ActiveRecord::Base.connection
     winnerObj = con.execute(ActiveRecord::Base::sanitize_sql(["SELECT * FROM \"?\" WHERE player = ?", board.board_name, winner])).first
@@ -53,6 +53,19 @@ class Match < ApplicationRecord
     end
   }
 
+  after_create {
+    if(board.rr_tournament) 
+      t_match = TournamentMatch.where("completed = false AND ((player1 = ? AND player2 = ?) OR (player1 = ? AND player2 = ?))", winner, loser, loser, winner).order("round ASC").first
+      if(t_match.nil?)
+        self.destroy
+      else
+        self.tournament_match = t_match
+        t_match.completed = true
+        t_match.save
+      end
+    end
+  }
+
   before_destroy {
     con = ActiveRecord::Base.connection
     winnerObj = con.execute(ActiveRecord::Base::sanitize_sql(["SELECT * FROM \"?\" WHERE player = ?", board.board_name, winner])).first
@@ -69,6 +82,10 @@ class Match < ApplicationRecord
     else
       con.execute(ActiveRecord::Base::sanitize_sql(["UPDATE \"?\" SET wins = ? WHERE player = ?", board.board_name, wins.to_s, winner]))
       con.execute(ActiveRecord::Base::sanitize_sql(["UPDATE \"?\" SET losses = ? WHERE player = ?", board.board_name, losses.to_s, loser]))
+    end
+    if (!tournament_match.nil?)
+      tournament_match.completed = false
+      tournament_match.save
     end
   }
 

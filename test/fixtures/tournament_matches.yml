@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  player1: MyString
+  player2: MyString
+  completed: false
+  completeby: 2019-09-08 23:02:15
+  board: one
+
+two:
+  player1: MyString
+  player2: MyString
+  completed: false
+  completeby: 2019-09-08 23:02:15
+  board: two

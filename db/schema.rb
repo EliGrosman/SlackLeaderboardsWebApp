@@ -10,7 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_07_202601) do
+ActiveRecord::Schema.define(version: 2019_09_09_201220) do
+
+  create_table "'Test'", id: false, force: :cascade do |t|
+    t.string "player", limit: 50, null: false
+    t.integer "wins"
+    t.integer "losses"
+    t.integer "elo"
+  end
 
   create_table "Ultimate", id: false, force: :cascade do |t|
     t.string "player", limit: 50, null: false
@@ -37,7 +44,21 @@ ActiveRecord::Schema.define(version: 2019_09_07_202601) do
     t.integer "score_neg"
     t.integer "winner_elo_change"
     t.integer "loser_elo_change"
+    t.integer "tournament_match_id"
     t.index ["board_id"], name: "index_matches_on_board_id"
+    t.index ["tournament_match_id"], name: "index_matches_on_tournament_match_id"
   end
 
+  create_table "tournament_matches", force: :cascade do |t|
+    t.string "player1"
+    t.string "player2"
+    t.boolean "completed"
+    t.integer "board_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "round"
+    t.index ["board_id"], name: "index_tournament_matches_on_board_id"
+  end
+
+  add_foreign_key "tournament_matches", "boards"
 end
