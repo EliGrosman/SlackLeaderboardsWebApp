@@ -4,5 +4,6 @@ class Board < ApplicationRecord
 
   before_destroy {
     TournamentMatch.where(board: self).delete_all
+    Match.where(board: self).delete_all
   }
 end

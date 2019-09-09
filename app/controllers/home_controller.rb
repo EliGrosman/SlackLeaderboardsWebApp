@@ -41,12 +41,11 @@ class HomeController < ApplicationController
 
   def deleteboard
     @board = Board.find(params[:id])
-    @matches = Match.where(board: @board)
     begin 
       ActiveRecord::Base.transaction do
         sql = ActiveRecord::Base::sanitize_sql(["DROP TABLE \"?\"", @board.board_name])
         ActiveRecord::Base.connection.execute(sql)
-        if @board.destroy && @matches.delete_all
+        if @board.destroy
           flash[:success] = "Board was deleted successfully"
           redirect_to root_path
         else
