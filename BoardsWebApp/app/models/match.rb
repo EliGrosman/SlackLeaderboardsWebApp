@@ -10,12 +10,12 @@ class Match < ApplicationRecord
       if(winnerObj.nil?)
         eloWinner = 1000
       else 
-        eloWinner = winnerObj[3]
+        eloWinner = winnerObj["elo"]
       end
       if(loserObj.nil?)
         eloLoser = 1000
       else 
-        eloLoser = loserObj[3]
+        eloLoser = loserObj["elo"]
       end
       calcElo(eloWinner, eloLoser)
       newEloWinner = (eloWinner.to_f + 32.0 * (1.0 - @E1)).ceil
@@ -30,7 +30,7 @@ class Match < ApplicationRecord
         con.execute(ActiveRecord::Base::sanitize_sql(["INSERT INTO \"?\" (player, wins, losses) VALUES(?, 1, 0)", board.board_name, winner]))
       end
       else
-      wins = winnerObj[1] + 1
+      wins = winnerObj["wins"] + 1
       if(board.elo_enabled)
         con.execute(ActiveRecord::Base::sanitize_sql(["UPDATE \"?\" SET wins = ?, elo = ? WHERE player = ?", board.board_name, wins.to_s, newEloWinner.to_s, winner]))
       else
@@ -44,9 +44,9 @@ class Match < ApplicationRecord
         con.execute(ActiveRecord::Base::sanitize_sql(["INSERT INTO \"?\" (player, wins, losses) VALUES(?, 0, 1)", board.board_name, loser]))
       end
       else
-      losses = loserObj[2] + 1
+      losses = loserObj["losses"] + 1
       if(board.elo_enabled)
-        con.execute(ActiveRecord::Base::sanitize_sql(["UPDATE \"?\" SET losses = ?, elo = ? WHERE player = ?", losses.to_s, newEloLoser.to_s, loser]))
+        con.execute(ActiveRecord::Base::sanitize_sql(["UPDATE \"?\" SET losses = ?, elo = ? WHERE player = ?", board.board_name, losses.to_s, newEloLoser.to_s, loser]))
       else
         con.execute(ActiveRecord::Base::sanitize_sql(["UPDATE \"?\" SET losses = ? WHERE player = ?", board.board_name, losses.to_s, loser]))
       end
@@ -57,14 +57,14 @@ class Match < ApplicationRecord
     con = ActiveRecord::Base.connection
     winnerObj = con.execute(ActiveRecord::Base::sanitize_sql(["SELECT * FROM \"?\" WHERE player = ?", board.board_name, winner])).first
     loserObj = con.execute(ActiveRecord::Base::sanitize_sql(["SELECT * FROM \"?\" WHERE player = ?", board.board_name, loser])).first
-    wins = winnerObj[1] - 1
-    losses = loserObj[2] - 1
+    wins = winnerObj["wins"] - 1
+    losses = loserObj["losses"] - 1
     if board.elo_enabled
-      currentEloWinner = winnerObj[3]
-      currentEloLoser = loserObj[3]
+      currentEloWinner = winnerObj["elo"]
+      currentEloLoser = loserObj["elo"]
       oldEloWinner = currentEloWinner - self.winner_elo_change
       oldEloLoser = currentEloLoser - self.loser_elo_change
-      con.execute(ActiveRecord::Base::sanitize_sql(["UPDATE \"?\" SET wins = ?, elo = ? WHERE player = ?", board.board_name, wins.to_s, oldEloWinner.to_s]))
+      con.execute(ActiveRecord::Base::sanitize_sql(["UPDATE \"?\" SET wins = ?, elo = ? WHERE player = ?", board.board_name, wins.to_s, oldEloWinner.to_s, winner]))
       con.execute(ActiveRecord::Base::sanitize_sql(["UPDATE \"?\" SET losses = ?, elo = ? WHERE player = ?", board.board_name, losses.to_s, oldEloLoser.to_s, loser]))
     else
       con.execute(ActiveRecord::Base::sanitize_sql(["UPDATE \"?\" SET wins = ? WHERE player = ?", board.board_name, wins.to_s, winner]))

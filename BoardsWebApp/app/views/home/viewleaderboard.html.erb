@@ -37,11 +37,11 @@
           <% @players.each do |player| %>
             <tr>
               <td><%= i %>
-              <td><%= player[0] %></td>
-              <td><%= player[1] %></td>
-              <td><%= player[2]%></td>
+              <td><%= Slackapi.getRealName(player["player"]) %></td>
+              <td><%= player["wins"] %></td>
+              <td><%= player["losses"]%></td>
               <% if @board.elo_enabled %>
-                <td><%= player[3]||0 %></td>
+                <td><%= player["elo"]||0 %></td>
               <% end %>
             </tr>
             <% i += 1 %>

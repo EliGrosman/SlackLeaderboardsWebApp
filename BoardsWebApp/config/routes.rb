@@ -10,4 +10,6 @@ Rails.application.routes.draw do
   patch '/match/:id', to: 'home#update', as: 'update_match'
   delete '/match/:id', to: 'home#destroy', as: 'delete_match'
   post '/report', to: 'commands#report'
+  get '/getboards', to: 'commands#getboards'
+  get '/leaderboard', to: 'commands#leaderboard'
 end
