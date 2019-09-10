@@ -62,6 +62,11 @@ skip_before_action :verify_authenticity_token
         end 
       end
     end  
+    if(@board.elo_enabled)
+      @players = @players.sort_by {|name, key| key[:elo]}.reverse
+    else
+      @players = @players.sort_by {|name, key| key[:wins] - key[:losses]}.reverse
+    end
     render json: @players, :status => :ok
   end
   def getboards
