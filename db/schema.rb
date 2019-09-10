@@ -10,21 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_09_201220) do
-
-  create_table "'Test'", id: false, force: :cascade do |t|
-    t.string "player", limit: 50, null: false
-    t.integer "wins"
-    t.integer "losses"
-    t.integer "elo"
-  end
-
-  create_table "Ultimate", id: false, force: :cascade do |t|
-    t.string "player", limit: 50, null: false
-    t.integer "wins"
-    t.integer "losses"
-    t.integer "elo"
-  end
+ActiveRecord::Schema.define(version: 2019_09_10_200457) do
 
   create_table "boards", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
@@ -40,11 +26,10 @@ ActiveRecord::Schema.define(version: 2019_09_09_201220) do
     t.integer "board_id"
     t.string "winner"
     t.string "loser"
-    t.integer "score_pos"
-    t.integer "score_neg"
     t.integer "winner_elo_change"
     t.integer "loser_elo_change"
     t.integer "tournament_match_id"
+    t.string "score"
     t.index ["board_id"], name: "index_matches_on_board_id"
     t.index ["tournament_match_id"], name: "index_matches_on_tournament_match_id"
   end

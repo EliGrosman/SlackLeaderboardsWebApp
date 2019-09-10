@@ -62,11 +62,36 @@ class HomeController < ApplicationController
 
   def viewleaderboard
     @board = Board.find(params[:id])
-    if(@board.elo_enabled)
-      @players = ActiveRecord::Base.connection.execute(ActiveRecord::Base::sanitize_sql(["SELECT * FROM \"?\" ORDER BY elo DESC", @board.board_name]))
-    else
-      @players = ActiveRecord::Base.connection.execute(ActiveRecord::Base::sanitize_sql(["SELECT * FROM \"?\" ORDER BY (wins-losses) DESC", @board.board_name]))
+    @matchWins = Match.where(board: @board).group(:winner).select("winner, COUNT(matches.winner) AS count_wins, SUM(winner_elo_change) AS elo")
+    @matchLosses = Match.where(board: @board).group(:loser).select("loser, COUNT(matches.loser) AS count_losses, SUM(loser_elo_change) AS elo")
+    @players = Hash.new{|hsh,key| hsh[key] = []}
+    @matchWins.each do |match|
+      if(!@board.elo_enabled)
+        @players[match.winner] = [wins: match.count_wins, losses: 0]
+      else
+        @players[match.winner] = [wins: match.count_wins, losses: 0, elo: 1000 + match.elo]
+      end
     end
+    puts @players
+    @matchLosses.each do |match|
+      if(@players[match.loser].empty?)
+        if(!@board.elo_enabled)
+          @players[match.loser] = [wins: 0, losses: match.count_losses]
+        else
+          @players[match.loser] = [wins: 0, losses: match.count_losses, elo: 1000 + match.elo]
+        end
+      else
+        if(!@board.elo_enabled)
+          @players[match.loser][0][:losses] = match.count_losses
+        else
+          @players[match.loser][0][:losses] = match.count_losses
+          @players[match.loser][0][:elo] += match.elo
+        end 
+      end
+    end
+    
+    @players = @players.sort_by {|name, key| key[0][:elo]}.reverse
+
   end
 
   def edit

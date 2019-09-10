@@ -38,24 +38,24 @@
             <tr>
               <% if @board.elo_enabled %>
                 <% if match.winner_elo_change >= 0 %>
-                  <td><%= Slackapi.getRealName(match.winner) %> </td>
+                  <td><%= Slackapi.getRealName(match.winner)||match.winner %> </td>
                   <td>+<%= match.winner_elo_change %></td>
                 <% else match.winner_elo_change < 0 %>
-                  <td><%= Slackapi.getRealName(match.winner) %> </td>
+                  <td><%= Slackapi.getRealName(match.winner)||match.winner %> </td>
                   <td><%= match.winner_elo_change %></td>
                 <% end %>
                 <% if match.loser_elo_change >= 0 %>
-                  <td><%= Slackapi.getRealName(match.loser) %> </td>
+                  <td><%= Slackapi.getRealName(match.loser)||match.loser %> </td>
                   <td>+<%= match.loser_elo_change %></td>
                 <% else match.loser_elo_change < 0 %>
-                  <td><%= Slackapi.getRealName(match.loser) %> </td>
+                  <td><%= Slackapi.getRealName(match.loser)||match.loser %> </td>
                   <td><%= match.loser_elo_change %></td>
                 <% end %>
               <% else %>
-                  <td><%= Slackapi.getRealName(match.winner) %> </td>
-                  <td><%= Slackapi.getRealName(match.loser) %> </td>
+                  <td><%= Slackapi.getRealName(match.winner)||match.winner %> </td>
+                  <td><%= Slackapi.getRealName(match.loser)||match.loser %> </td>
               <% end %>
-              <td><%= match.score_pos.to_s + "-" + match.score_neg.to_s %></td>
+              <td><%= match.score %></td>
               <td><%= link_to 'Edit match', edit_match_path(match), class: "btn btn-primary btn-sm active" %></td>
             </tr>
           <% end %>
