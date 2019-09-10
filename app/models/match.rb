@@ -4,10 +4,10 @@ class Match < ApplicationRecord
   belongs_to :tournament_match, optional: true
   before_create {
     if(board.elo_enabled)
-      @eloWinnerPos = Match.where(board: board, winner: winner).select("SUM(winner_elo_change) AS elo").first
-      @eloWinnerNeg = Match.where(board: board, loser: winner).select("SUM(loser_elo_change) AS elo").first
-      @eloLoserPos = Match.where(board: board, winner: loser).select("SUM(winner_elo_change) AS elo").first
-      @eloLoserNeg = Match.where(board: board, loser: loser).select("SUM(loser_elo_change) AS elo").first
+      @eloWinnerPos = Match.where(board: board, winner: winner).select("SUM(winner_elo_change) AS elo").pluck(:elo).first
+      @eloWinnerNeg = Match.where(board: board, loser: winner).select("SUM(loser_elo_change) AS elo").pluck(:elo).first
+      @eloLoserPos = Match.where(board: board, winner: loser).select("SUM(winner_elo_change) AS elo").pluck(:elo).first
+      @eloLoserNeg = Match.where(board: board, loser: loser).select("SUM(loser_elo_change) AS elo").pluck(:elo).first
 
       eloWinner = 1000 + ((@eloWinnerPos.elo||0) + (@eloWinnerNeg.elo||0))
       eloLoser = 1000 + ((@eloLoserPos.elo||0) + (@eloLoserNeg.elo||0))
