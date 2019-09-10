@@ -67,31 +67,33 @@ class HomeController < ApplicationController
     @players = Hash.new{|hsh,key| hsh[key] = []}
     @matchWins.each do |match|
       if(!@board.elo_enabled)
-        @players[match.winner] = [wins: match.count_wins, losses: 0]
+        @players[match.winner] = {wins: match.count_wins, losses: 0}
       else
-        @players[match.winner] = [wins: match.count_wins, losses: 0, elo: 1000 + match.elo]
+        @players[match.winner] = {wins: match.count_wins, losses: 0, elo: 1000 + match.elo}
       end
     end
-    puts @players
+
     @matchLosses.each do |match|
       if(@players[match.loser].empty?)
         if(!@board.elo_enabled)
-          @players[match.loser] = [wins: 0, losses: match.count_losses]
+          @players[match.loser] = {wins: 0, losses: match.count_losses}
         else
-          @players[match.loser] = [wins: 0, losses: match.count_losses, elo: 1000 + match.elo]
+          @players[match.loser] = {wins: 0, losses: match.count_losses, elo: 1000 + match.elo}
         end
       else
         if(!@board.elo_enabled)
-          @players[match.loser][0][:losses] = match.count_losses
+          @players[match.loser][:losses] = match.count_losses
         else
-          @players[match.loser][0][:losses] = match.count_losses
-          @players[match.loser][0][:elo] += match.elo
+          @players[match.loser][:losses] = match.count_losses
+          @players[match.loser][:elo] += match.elo
         end 
       end
+    end  
+    if(@board.elo_enabled)
+      @players = @players.sort_by {|name, key| key[:elo]}.reverse
+    else
+      @players = @players.sort_by {|name, key| key[:wins] - key[:losses]}.reverse
     end
-    
-    @players = @players.sort_by {|name, key| key[0][:elo]}.reverse
-
   end
 
   def edit

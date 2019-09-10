@@ -38,10 +38,10 @@
             <tr>
               <td><%= i %>
               <td><%= Slackapi.getRealName(player[0])||player[0] %></td>
-              <td><%= player[1][0][:wins] %></td>
-              <td><%= player[1][0][:losses]%></td>
+              <td><%= player[1][:wins] %></td>
+              <td><%= player[1][:losses]%></td>
               <% if @board.elo_enabled %>
-                <td><%= player[1][0][:elo] %></td>
+                <td><%= player[1][:elo] %></td>
               <% end %>
             </tr>
             <% i += 1 %>
