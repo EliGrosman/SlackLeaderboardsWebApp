@@ -10,27 +10,12 @@ class HomeController < ApplicationController
 
   def createboard
     @board = Board.new(board_params)
-    begin
-      ActiveRecord::Base.transaction do
-      sql = ActiveRecord::Base::sanitize_sql(["CREATE TABLE \"?\" (player varchar(50) NOT NULL, wins INT, losses INT", board_params[:board_name]])
-      if(board_params[:elo_enabled]) 
-        sql += ", elo INT"
-      end
-      sql += ")"
-      logger.error(board_params[:elo_enabled] == true)
-      ActiveRecord::Base.connection.execute(sql)
-      if @board.save
-        flash[:success] = "Board was successfully created"
-        redirect_to root_path
-      else 
-        flash.now[:danger] = "Board could not be created"
-        render :newboard
-      end
-    end
-    rescue Exception => exc
-      logger.error(exc.message)
-        flash.now[:danger] = "Board could not be created"
-        render :newboard
+    if @board.save
+      flash[:success] = "Board was successfully created"
+      redirect_to root_path
+    else 
+      flash.now[:danger] = "Board could not be created"
+      render :newboard
     end
   end
   
@@ -41,24 +26,14 @@ class HomeController < ApplicationController
 
   def deleteboard
     @board = Board.find(params[:id])
-    begin 
-      ActiveRecord::Base.transaction do
-        sql = ActiveRecord::Base::sanitize_sql(["DROP TABLE \"?\"", @board.board_name])
-        ActiveRecord::Base.connection.execute(sql)
-        if @board.destroy
-          flash[:success] = "Board was deleted successfully"
-          redirect_to root_path
-        else
-          flash[:danger] = "Board was not deleted"
-          redirect_to root_path
-        end
-      end
-      rescue Exception => exc
-        logger.error(exc.message)
-        flash[:danger] = "Board was not deleted"
-        redirect_to root_path
-      end
+    if @board.destroy
+      flash[:success] = "Board was deleted successfully"
+      redirect_to root_path
+    else
+      flash[:danger] = "Board was not deleted"
+      redirect_to root_path
     end
+  end
 
   def viewleaderboard
     @board = Board.find(params[:id])
@@ -131,10 +106,14 @@ class HomeController < ApplicationController
     else
       @matches = TournamentMatch.where(board: @board).order("round ASC")
       @rounds = TournamentMatch.where(board: @board).group(:round).order("round ASC").select(:round)
+      apiRequest = Slackapi.getAllUsers()
+      @players = apiRequest.first
+      @ids = apiRequest.last
     end
   end
 
   def createtournament
+    @board = Board.find(params[:id])
     players = Hash.new
     seeded = params[:seeded]
     numGames = params[:numGames]
@@ -143,7 +122,17 @@ class HomeController < ApplicationController
         players[id] = attrs
       end
     end
-
+    if(seeded.nil?)
+      puts players
+      players = Hash[players.to_a.shuffle]
+      puts players
+    end
+    if(players.size < 3)
+      puts "coochie"
+      flash[:danger] = "You need more players to start a tournament."
+      redirect_to manage_tournament_path(@board)
+      return
+    end 
     q1 = Queue.new
     q2 = Queue.new
     if(players.size % 2 != 0) 
@@ -162,10 +151,10 @@ class HomeController < ApplicationController
       q2 << Hash[players.to_a.reverse]["player" + i.to_s]
     end
 
-    generateTourneyRounds(q1, q2, numGames.to_i, Board.find(params[:id]))
+    generateTourneyRounds(q1, q2, numGames.to_i, @board)
 
-    flash[:success] = players.to_json
-    redirect_to root_path
+    flash[:success] = "Tournament created!"
+    redirect_to manage_tournament_path(@board)
   end
 
   def generateTourneyRounds(q1, q2, n, board)
@@ -204,7 +193,7 @@ class HomeController < ApplicationController
     end
 
     def match_params
-      params.require(:match).permit(:winner, :loser, :score_pos, :score_neg)
+      params.require(:match).permit(:winner, :loser, :score)
     end
 
 end

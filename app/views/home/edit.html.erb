@@ -23,11 +23,9 @@
   <p><label for = "match_loser">Loser</label>
   <%= f.text_field  'loser', :disabled => true %></p>
 
-  <p><label for = "match_score_pos">Winner's Score</label>
-  <%= f.text_field  'score_pos' %></p>
+  <p><label for = "match_score">Score</label>
+  <%= f.text_field  'score' %></p>
 
-  <p><label for = "match_score_neg">Loser's Score</label>
-  <%= f.text_field  'score_neg' %></p>
 
 <%= f.submit "Update Match", class: "btn btn-primary btn-sm active" %>
 <% end %>

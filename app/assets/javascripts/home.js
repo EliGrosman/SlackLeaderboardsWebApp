@@ -1,15 +1,21 @@
-var i = 0  
+var x = 0  
+
 function addPersonField() {
     var li = document.createElement("li");           
-    var input = document.createElement("INPUT");
-    input.setAttribute("type", "text");
-    input.setAttribute("id", i);
-    input.setAttribute("name", "player" + i);
+    var input = document.createElement("select");
+    input.setAttribute("id", x);
+    input.setAttribute("name", "player" + x);
+    for(var i = 0; i < players[0].length; i++) {
+      var el = document.createElement("option");
+      el.textContent = players[0][i]
+      el.value = ids[0][i]
+      input.appendChild(el)
+    }
     li.appendChild(input);
 
 
     document.getElementById("playerList").appendChild(li);
-    i++
+    x++
     //show address header
     $("#addressHeader").show();
     }

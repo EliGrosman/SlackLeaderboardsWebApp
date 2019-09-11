@@ -11,7 +11,17 @@
   </header>
   <div class="row">
 <div class="col-lg-8 mx-auto">
+<br>
+      <% flash.each do |message_type, message| %>
+
+        <div class="alert alert-<%= message_type %>"><%= message %></div>
+        <% end %>
 <% if (@matches.empty?) %>
+<script>
+  var players = [<%= @players.to_json.html_safe %>];
+  var ids = [<%= @ids.to_json.html_safe %>];
+
+</script>
 <%= form_for @board, :url => {:action => "createtournament", :id => @board} do |f| %>
     <br />
     <div id="header"> 
