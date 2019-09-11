@@ -2,6 +2,8 @@
 
 Slack leaderboards is a web application that manages leaderboards and tournaments. The application also has multiple endpoints that allow other applications to interface with the leaderboards. *An premade slack-bot that uses these endpoints is provided below*.
 
+I made this in a couple days so there are probably a lot of bugs that I haven't found. Please let me know if you find something.
+
 ## Setup
 Instructions on how to install and use this application are below:
 
