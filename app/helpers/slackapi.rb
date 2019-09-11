@@ -22,7 +22,7 @@ class Slackapi
       users = []
       ids = []
       JSON.load(response.body)["members"].each do |user|
-        if(!user["is_bot"])
+        if(!user["is_bot"] && user["real_name"] != "Slackbot")
           users << user["real_name"]
           ids << user["id"]
         end
