@@ -69,8 +69,21 @@ skip_before_action :verify_authenticity_token
     end
     render json: @players, :status => :ok
   end
+
   def getboards
     @boards = Board.all
     render json: @boards, :status => :ok
   end
+
+  def tournamentmatches
+    js = {params[:game]=> params[:round]}
+    @board = Board.where("lower(board_name) LIKE ?", params[:game].downcase).first
+    @matches = TournamentMatch.where(board: @board, round: params[:round].to_i, completed: false)
+    if(!@matches.empty?)
+      render json: @matches, :status => :ok
+    else
+      render json: nil, :status => :bad_request
+    end
+  end
+
 end
