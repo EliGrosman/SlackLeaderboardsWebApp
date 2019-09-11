@@ -5,12 +5,17 @@ Slack leaderboards is a web application that manages leaderboards and tournament
 ## Getting started
 Instructions on how to install and use this application are below:
 
-### Prerequisites
+### Prerequisites for the web application
 You will first need a server to host the web application. If you do not have a server of your own I personally reccommend using [Heroku](https://heroku.com). The following instructions will be on how to host the web application on heroku.
 
 If you are using your own server, be sure to have the following installed:
 * [Ruby](https://www.ruby-lang.org/en/downloads/) 
 * Rails (once ruby is installed run ```gem install rails```
+* [Sqlite3](https://www.sqlite.org/download.html) if running the development environment
+* [PostgreSQL](https://www.postgresql.org/download/) if running the production environment
+
+## 
+
 * Ruby version
 
 * System dependencies
