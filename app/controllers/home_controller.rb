@@ -127,12 +127,17 @@ class HomeController < ApplicationController
       players = Hash[players.to_a.shuffle]
       puts players
     end
-    if(players.size < 3)
+    if(players.size < 3 || players.group_by{|h| h[1]}.values.select{|players| players.size > 1}.flatten.size > 0)
       puts "coochie"
-      flash[:danger] = "You need more players to start a tournament."
+      flash[:danger] = "You need more unique players to start a tournament."
       redirect_to manage_tournament_path(@board)
       return
     end 
+    if(numGames.to_i < 1)
+      flash[:danger] = "You need more rounds in the tournament."
+      redirect_to manage_tournament_path(@board)
+      return
+    end
     q1 = Queue.new
     q2 = Queue.new
     if(players.size % 2 != 0) 
