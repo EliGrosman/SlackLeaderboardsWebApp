@@ -2,7 +2,7 @@
 
 Slack leaderboards is a web application that manages leaderboards and tournaments. The application also has multiple endpoints that allow other applications to interface with the leaderboards. *An premade slack-bot that uses these endpoints is provided below*.
 
-## Getting Started
+## Setup
 Instructions on how to install and use this application are below:
 
 ### Creating a Slack Bot
@@ -21,7 +21,7 @@ These instructions will detail how to create a slack bot and get the required co
 6. Go back to "OAuth & Permissions" and then click "Install Bot User" and finally click "Allow"
 7. IMPORTANT: Copy the "OAuth Access Token" and "Verification Token" from the "Basic Information" tab. You will need these to set up the web application.
 
-### Prerequisites for the web application
+### Prerequisites for the Web Application
 You will first need a server to host the web application. If you do not have a server of your own I personally reccommend using [Heroku](https://heroku.com) because it is free. The following instructions will be on how to host the web application on heroku.
 
 If you are using your own server, be sure to have the following installed:
@@ -55,6 +55,13 @@ If you are using Heroku, be sure to have the following installed:
 7. When Heroku has finished, type the following command to finish up setting the web app: ```heroku run rake db:migrate```
 8. Now the web app is set up and you can visit it in a browser.
 
+### The Web Application's Endpoints
+ Here are the web app's HTTP endpoints:
+ * ```GET /getboards``` Gets a list of all the leaderboards stored in the database
+ * ```GET /leaderboard``` Gets the rankings of all the players on a leaderboard
+ * ```GET /tournamentmatches``` Gets the tournament matches for a specific board and round of the tournament
+ * ```POST /report``` Reports a match 
+ 
 ### Installing the Slack-Bot
  This Slack-bot uses the endpoints provided by the web application to display the information to users on Slack. In order for leaderboards and tournaments to be avaliable on slack, both the slack-bot and web application need to be running. Follow these instructions to install the slack-bot.
  
