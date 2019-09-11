@@ -2,6 +2,9 @@ class Match < ApplicationRecord
   @T1 = @T2 = @E1 = @E2 = 0
   belongs_to :board
   belongs_to :tournament_match, optional: true
+  validates :winner, presence: true
+  validates :loser, presence: true
+  
   before_create {
     if(board.elo_enabled)
       @eloWinnerPos = Match.where(board: board, winner: winner).pluck("SUM(winner_elo_change)").first

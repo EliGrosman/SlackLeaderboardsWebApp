@@ -1,6 +1,7 @@
 class Board < ApplicationRecord
   has_many :match
   has_many :tournament_match
+  validates :board_name, presence: true
 
   before_destroy {
     TournamentMatch.where(board: self).delete_all
