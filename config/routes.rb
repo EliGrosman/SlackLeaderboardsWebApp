@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   get '/matches/:id', to: 'home#show', as: 'match'
   get '/match/:id/edit', to: 'home#edit', as: 'edit_match'
   get '/tournament/:id', to: 'home#managetournament', as: 'manage_tournament'
-  patch '/tournament/:id', to: 'home#createtournament', as: 'create_tournament'
+  patch '/tournament/:id', to: 'home#createtournament', as: 'create_tournament'b
   get '/leaderboard/:id', to: 'home#viewleaderboard', as: 'view_leaderboard'
   get '/deleteboard/:id', to: 'home#deleteboard', as: 'delete_board'
   patch '/match/:id', to: 'home#update', as: 'update_match'
