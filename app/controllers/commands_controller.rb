@@ -86,4 +86,19 @@ skip_before_action :verify_authenticity_token
     end
   end
 
+  def redeem
+    if Point.find_by(code: params[:code]).nil?
+      render json: nil, :status => :bad_request
+    elsif !Point.find_by(code: params[:code]).user.nil?
+      render json: nil, :status => :forbidden
+    else
+      p = Point.find_by(code: params[:code])
+      p.user = params[:user]
+      if p.save
+        render json: nil, :status => :ok
+      else
+        render json: nil, :status => :bad_request
+      end
+    end
+  end
 end
