@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_03_054707) do
+ActiveRecord::Schema.define(version: 2019_11_03_055051) do
 
   create_table "boards", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 2019_11_03_054707) do
     t.string "board_name"
     t.boolean "rr_tournament"
     t.boolean "elo_enabled"
+    t.boolean "points_board"
   end
 
   create_table "matches", force: :cascade do |t|
