@@ -1,7 +1,7 @@
 class HomeController < ApplicationController
 
   def index
-    @boards = Board.left_outer_joins(:match).group(:board_name, :id, :elo_enabled, :rr_tournament).select("boards.id, boards.board_name, boards.elo_enabled, boards.rr_tournament, COALESCE(COUNT(matches.winner), 0) AS count_matches").order("count_matches DESC")
+    @boards = Board.left_outer_joins(:match).group(:board_name, :id, :elo_enabled, :rr_tournament, :points_board).select("boards.id, boards.board_name, boards.elo_enabled, boards.rr_tournament, boards.points_board, COALESCE(COUNT(matches.winner), 0) AS count_matches").order("count_matches DESC")
   end
 
   def newboard
@@ -24,6 +24,9 @@ class HomeController < ApplicationController
     @matches = Match.where(board: @board).order('created_at DESC')
   end
 
+  def showpoints
+  end
+  
   def deleteboard
     @board = Board.find(params[:id])
     if @board.destroy
@@ -128,7 +131,6 @@ class HomeController < ApplicationController
       puts players
     end
     if(players.size < 3 || players.group_by{|h| h[1]}.values.select{|players| players.size > 1}.flatten.size > 0)
-      puts "coochie"
       flash[:danger] = "You need more unique players to start a tournament."
       redirect_to manage_tournament_path(@board)
       return
@@ -194,7 +196,7 @@ class HomeController < ApplicationController
 
   private
     def board_params
-      params.require(:board).permit(:board_name, :elo_enabled, :rr_tournament)
+      params.require(:board).permit(:board_name, :elo_enabled, :rr_tournament, :points_board)
     end
 
     def match_params
