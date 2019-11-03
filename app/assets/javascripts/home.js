@@ -34,3 +34,23 @@ function validate(evt) {
     if(theEvent.preventDefault) theEvent.preventDefault();
   }
 }
+
+
+$(document).ready(function() {
+  return $("#board_points_board").click(function() {
+    $("#board_elo_enabled").prop("disabled", this.checked); 
+    $("#board_rr_tournament").prop("disabled", this.checked);
+  });
+});
+
+$(document).ready(function() {
+  return $("#board_elo_enabled").click(function() {
+    $("#board_points_board").prop("disabled", this.checked);
+  });
+});
+
+$(document).ready(function() {
+  return $("#board_rr_tournament").click(function() {
+    $("#board_points_board").prop("disabled", this.checked);
+  });
+});
