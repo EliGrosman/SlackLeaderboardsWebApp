@@ -68,6 +68,19 @@ class HomeController < ApplicationController
     end
   end
 
+  def createpoints
+    @board = Board.find(params[:id])
+    for i in 1..point_params[:count].to_i do
+      Point.create!(points: point_params[:points], description: point_params[:description], board: @board)
+    end
+    redirect_to points_path(@board)
+  end
+
+  def viewpointsboard
+    @board = Board.find(params[:id])
+    @points = Point.where.not(user: nil).where(board: @board).group(:user).sum(:points).sort_by{ |name, points| points }.reverse
+  end
+
   def viewleaderboard
     @board = Board.find(params[:id])
     @matchWins = Match.where(board: @board).group(:winner).select("winner, COUNT(matches.winner) AS count_wins, SUM(winner_elo_change) AS elo")
@@ -234,7 +247,7 @@ class HomeController < ApplicationController
     end
 
     def point_params
-      params.require(:point).permit(:user, :points, :code)
+      params.require(:point).permit(:user, :points, :code, :description, :count)
     end
 
 end

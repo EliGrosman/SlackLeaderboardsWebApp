@@ -7,10 +7,12 @@ Rails.application.routes.draw do
   get '/point/:id/edit', to: 'home#editpoints', as: "edit_point"
   delete '/point/:id', to: 'home#destroypoints', as: "delete_point"
   patch '/point/:id', to: 'home#updatepoints', as: "update_point"
+  post '/points/:id', to: "home#createpoints"
   get '/match/:id/edit', to: 'home#edit', as: 'edit_match'
   get '/tournament/:id', to: 'home#managetournament', as: 'manage_tournament'
   patch '/tournament/:id', to: 'home#createtournament', as: 'create_tournament'
   get '/leaderboard/:id', to: 'home#viewleaderboard', as: 'view_leaderboard'
+  get '/pointsboard/:id', to: 'home#viewpointsboard', as: 'view_pointsboard'
   get '/deleteboard/:id', to: 'home#deleteboard', as: 'delete_board'
   patch '/match/:id', to: 'home#update', as: 'update_match'
   delete '/match/:id', to: 'home#destroy', as: 'delete_match'
