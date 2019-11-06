@@ -53,10 +53,11 @@
               <% end %>
               <% if !board.points_board %>
                 <td><%= link_to 'Manage matches', match_path(board), class: "btn btn-primary btn-sm active" %></td>
+                <td><%= link_to 'View leaderboard', view_leaderboard_path(board), class: "btn btn-primary btn-sm active" %></td>
               <% else %>
                 <td><%= link_to 'Manage points', points_path(board), class: "btn btn-primary btn-sm active" %></td>
+                <td><%= link_to 'View leaderboard', view_pointsboard_path(board), class: "btn btn-primary btn-sm active" %></td>
               <% end %>
-              <td><%= link_to 'View leaderboard', view_leaderboard_path(board), class: "btn btn-primary btn-sm active" %></td>
               <td><%= link_to 'Delete board', delete_board_path(board), class: "btn btn-primary btn-sm active" %></td>
             </tr>
           <% end %>
