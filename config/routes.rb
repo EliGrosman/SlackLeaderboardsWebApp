@@ -4,6 +4,9 @@ Rails.application.routes.draw do
   post '/', to: 'home#createboard', as: 'create_board'
   get '/matches/:id', to: 'home#show', as: 'match'
   get '/points/:id', to: 'home#showpoints', as: "points"
+  get '/point/:id/edit', to: 'home#editpoints', as: "edit_point"
+  delete '/point/:id', to: 'home#destroypoints', as: "delete_point"
+  patch '/point/:id', to: 'home#updatepoints', as: "update_point"
   get '/match/:id/edit', to: 'home#edit', as: 'edit_match'
   get '/tournament/:id', to: 'home#managetournament', as: 'manage_tournament'
   patch '/tournament/:id', to: 'home#createtournament', as: 'create_tournament'
