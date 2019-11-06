@@ -24,7 +24,7 @@
             <th>Elo enabled</th>
             <th>Round-robin tournament</th>
             <th>Points board</th>
-            <th>Number of matches</th>
+            <th>Number of matches/point codes</th>
           </tr>
         </thead>    
         <tbody>
@@ -46,7 +46,11 @@
               <% else %>
                 <td>No</td>
               <% end %>
-              <td><%= board.count_matches||0 %></td>
+              <% if board.points_board %>
+                <td><%= Point.where(board: board).count %></td>
+              <% else %>
+                <td><%= board.count_matches||0 %></td>
+              <% end %>
               <% if !board.points_board %>
                 <td><%= link_to 'Manage matches', match_path(board), class: "btn btn-primary btn-sm active" %></td>
               <% else %>
