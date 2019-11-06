@@ -22,6 +22,7 @@
             <th>User</th>
             <th>Points</th>
             <th>Code</th>
+            <th>Description</th>
           </tr>
         </thead>    
         <tbody>
@@ -30,6 +31,7 @@
                   <td><%= Slackapi.getRealName(point.user)||point.user %> </td>
                   <td><%= point.points %></td>
                   <td><%= point.code %></td>
+                  <td><%= point.description %></td>
               <td><%= link_to 'Edit points', edit_point_path(point), class: "btn btn-primary btn-sm active" %></td>
             </tr>
           <% end %>
@@ -41,6 +43,7 @@
           <tr>
             <th>Points</th>
             <th>Code</th>
+            <th>Description</th>
           </tr>
         </thead>    
         <tbody>
@@ -48,6 +51,7 @@
             <tr>
                   <td><%= point.points %></td>
                   <td><%= point.code %></td>
+                  <td><%= point.description %></td>
               <td><%= link_to 'Edit points', edit_point_path(point), class: "btn btn-primary btn-sm active" %></td>
             </tr>
           <% end %>
@@ -55,6 +59,22 @@
         </table>
         <% end %>
         <br>
-            <%= link_to 'Back', root_path(), method: :get, class: "btn btn-primary btn-sm active" %>
+
+<h3>Create points </h3>
+      <%= form_tag :action => 'createpoints' do %>
+        <p><label for = "points_points">Points</label>
+        <%= text_field 'point', 'points'%></p>
+
+        <p><label for = "points_count">Count</label>
+        <%= text_field 'point', 'count'%></p>
+        
+        <p><label for = "points_description">Description</label>
+        <%= text_field 'point', 'description'%></p>
+        
+      <%= submit_tag "Create Points", class: "btn btn-primary btn-sm active" %>
+      <% end %>
+      <br>
+                  <%= link_to 'Back', root_path(), method: :get, class: "btn btn-primary btn-sm active" %>
+
           </div>
         </div>
