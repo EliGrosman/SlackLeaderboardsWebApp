@@ -1,0 +1,60 @@
+<header class="masthead bg-primary text-white text-center">
+    <div class="container d-flex align-items-center flex-column">
+      <h1 class="masthead-heading text-uppercase mb-0"><%= @board.board_name %></h1>
+      <div class="divider-custom divider-light">
+        <div class="divider-custom-line"></div>
+      </div>
+    </div>
+  </header>
+        <section class="page-section" id="buttons">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+              <% flash.each do |message_type, message| %>
+        <div class="alert alert-<%= message_type %>"><%= message %></div>
+        <% end %>
+        <% if @used_points.blank? && @unused_points.blank? %>
+        <h3>There are currently no points created or used.</h3>
+        <% else %>
+        <h3>Redeemed points</h3>
+  <table class="table">    
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Points</th>
+            <th>Code</th>
+          </tr>
+        </thead>    
+        <tbody>
+          <% @used_points.each do |point| %>
+            <tr>
+                  <td><%= Slackapi.getRealName(point.user)||point.user %> </td>
+                  <td><%= point.points %></td>
+                  <td><%= point.code %></td>
+              <td><%= link_to 'Edit points', edit_point_path(point), class: "btn btn-primary btn-sm active" %></td>
+            </tr>
+          <% end %>
+        </tbody>
+        </table>
+        <h3>Unredeemed points</h3>
+  <table class="table">    
+        <thead>
+          <tr>
+            <th>Points</th>
+            <th>Code</th>
+          </tr>
+        </thead>    
+        <tbody>
+          <% @unused_points.each do |point| %>
+            <tr>
+                  <td><%= point.points %></td>
+                  <td><%= point.code %></td>
+              <td><%= link_to 'Edit points', edit_point_path(point), class: "btn btn-primary btn-sm active" %></td>
+            </tr>
+          <% end %>
+        </tbody>
+        </table>
+        <% end %>
+        <br>
+            <%= link_to 'Back', root_path(), method: :get, class: "btn btn-primary btn-sm active" %>
+          </div>
+        </div>

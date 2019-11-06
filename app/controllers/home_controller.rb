@@ -25,6 +25,36 @@ class HomeController < ApplicationController
   end
 
   def showpoints
+    @board = Board.find(params[:id])
+    @used_points = Point.where(board: @board).where.not(user: nil)
+    @unused_points = Point.where(board: @board  , user: nil)
+  end
+
+  def editpoints
+    @point = Point.find(params[:id])
+  end
+
+  def updatepoints
+    @point = Point.find(params[:id])
+    if (@point.update(point_params))
+      flash[:success] = "Points were updated successfully"
+      redirect_to points_path(@point.board)
+    else
+      flash.now[:danger] = "Could not update points"
+      render edit_point_path(@point)
+    end
+  end
+
+  def destroypoints
+    @point = Point.find(params[:id])
+    @board = @point.board
+    if @point.destroy
+      flash[:success] = "Points were deleted successfully"
+      redirect_to points_path(@board)
+    else
+      flash[:danger] = "Could not delete points"
+      redirect_to points_path(@match)
+    end
   end
   
   def deleteboard
@@ -201,6 +231,10 @@ class HomeController < ApplicationController
 
     def match_params
       params.require(:match).permit(:winner, :loser, :score)
+    end
+
+    def point_params
+      params.require(:point).permit(:user, :points, :code)
     end
 
 end

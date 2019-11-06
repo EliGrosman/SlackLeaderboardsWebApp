@@ -1,0 +1,38 @@
+<header class="masthead bg-primary text-white text-center">
+
+    <div class="container d-flex align-items-center flex-column">
+
+      <h1 class="masthead-heading text-uppercase mb-0">Edit Points</h1>
+
+      <div class="divider-custom divider-light">
+        <div class="divider-custom-line"></div>
+      </div>
+    </div>
+  </header>
+  <div class="row">
+<div class="col-lg-8 mx-auto">
+      <% flash.each do |message_type, message| %>
+        <div class="alert alert-<%= message_type %>"><%= message %></div>
+      <% end %>
+      <br>
+<%= form_for @point, :url => {:action => "updatepoints", :id => @point} do |f| %>
+
+  <p><label for = "point_user">User</label>
+  <%= f.text_field  'user', :disabled => true %></p>
+
+  <p><label for = "point_points">Points</label>
+  <%= f.text_field  'points' %></p>
+
+  <p><label for = "point_code">Code</label>
+  <%= f.text_field  'code', :disabled => true %></p>
+
+
+<%= f.submit "Update Points", class: "btn btn-primary btn-sm active" %>
+<% end %>
+<br>
+<%= button_to "Delete Points", {:controller => :home, :action => "destroypoints"}, :method => :delete, class: "btn btn-primary btn-sm active" %>
+<br>
+<%= link_to 'Back', points_path(@point.board), method: :get, class: "btn btn-primary btn-sm active" %>
+
+</div>
+</div>
