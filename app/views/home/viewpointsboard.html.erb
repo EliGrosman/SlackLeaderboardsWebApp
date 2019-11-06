@@ -1,0 +1,45 @@
+<header class="masthead bg-primary text-white text-center">
+
+    <div class="container d-flex align-items-center flex-column">
+
+      <h1 class="masthead-heading text-uppercase mb-0"><%= @board.board_name %></h1>
+
+      <div class="divider-custom divider-light">
+        <div class="divider-custom-line"></div>
+      </div>
+    </div>
+  </header>
+        <section class="page-section" id="buttons">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+              <% flash.each do |message_type, message| %>
+        <div class="alert alert-<%= message_type %>"><%= message %></div>
+        <% end %>
+        <% if @points.blank? %>
+        <h3>There are currently no matches reported on this board</h3>
+        <% else %>
+        <h3>Points for <%= @board.board_name %></h3>
+  <table class="table">    
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Points</th>
+          </tr>
+        </thead>    
+        <tbody>
+          <% @points.each do |point| %>
+            <tr>
+              <td><%= Slackapi.getRealName(point[0])||point[0] %></td>
+              <td><%= point[1] %></td>
+            </tr>
+          <% end %>
+        </tbody>
+        </table>
+        <% end %>
+        <br>
+        <%= link_to 'View breakdown', points_path(@board), class: "btn btn-primary btn-sm active" %>
+        <br>
+        <br>
+            <%= link_to 'Back', root_path(), method: :get, class: "btn btn-primary btn-sm active" %>
+          </div>
+        </div>
