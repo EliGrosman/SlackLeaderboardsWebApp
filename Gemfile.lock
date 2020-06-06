@@ -88,6 +88,7 @@ GEM
       railties (>= 3.2, < 6.1)
     erubi (1.8.0)
     execjs (2.7.0)
+    ffi (1.11.1)
     ffi (1.11.1-x64-mingw32)
     font-awesome-sass (5.9.0)
       sassc (>= 1.11)
@@ -119,11 +120,15 @@ GEM
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
     minitest (5.11.3)
+    msgpack (1.3.1)
     msgpack (1.3.1-x64-mingw32)
     multi_xml (0.6.0)
     nio4r (2.5.1)
+    nokogiri (1.10.4)
+      mini_portile2 (~> 2.4.0)
     nokogiri (1.10.4-x64-mingw32)
       mini_portile2 (~> 2.4.0)
+    pg (1.1.4)
     pg (1.1.4-x64-mingw32)
     popper_js (1.14.5)
     public_suffix (4.0.1)
@@ -177,6 +182,8 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (>= 1.1, < 3)
+    sassc (2.2.0)
+      ffi (~> 1.9)
     sassc (2.2.0-x64-mingw32)
       ffi (~> 1.9)
     sassc-rails (2.1.2)
@@ -224,12 +231,13 @@ GEM
       selenium-webdriver (>= 3.0, < 4.0)
     websocket-driver (0.7.1)
       websocket-extensions (>= 0.1.0)
-    websocket-extensions (0.1.4)
+    websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
     zeitwerk (2.1.10)
 
 PLATFORMS
+  ruby
   x64-mingw32
 
 DEPENDENCIES
