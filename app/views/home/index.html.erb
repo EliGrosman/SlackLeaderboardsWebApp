@@ -40,6 +40,7 @@
               <% else %>
                 <td>No</td>
               <% end %>
+              <td><%= board.count_matches||0 %></td>
               <% if !board.points_board %>
                 <td><%= link_to 'Manage matches', match_path(board), class: "btn btn-primary btn-sm active" %></td>
                 <td><%= link_to 'View leaderboard', view_leaderboard_path(board), class: "btn btn-primary btn-sm active" %></td>
