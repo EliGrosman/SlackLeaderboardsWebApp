@@ -14,7 +14,11 @@ class Slackapi
       return nil
     else
       profile = JSON.load(res.body)["user"]["profile"]
-      return profile["first_name"] + " " + (profile["last_name"][0]||" ").upcase
+      if profile["first_name"].nil? && profile["last_name"].nil?
+        return profile["real_name"]
+      else
+          return profile["first_name"] + " " + (profile["last_name"][0]||" ").upcase
+      end
     end
   end
 
