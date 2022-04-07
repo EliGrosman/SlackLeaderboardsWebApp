@@ -1,10 +1,12 @@
 class Slackapi
 
   def self.getRealName(userid)
-    uri = URI.parse("https://slack.com/api/users.info")
+    url = URI.parse("https://slack.com/api/users.info")
     params = {"user" => userid}
     headers = {"Authorization" => "Bearer #{ENV["SLACK_ACCESS_TOKEN"]}"}
-    response = Net::HTTP.post_form(uri, params, headers)
+
+    http = Net::HTTP.new(url.host, url.port)
+    response = http.post(url.path, params.to_json, headers)
     if JSON.load(response.body)["error"]
       return nil
     else
@@ -14,10 +16,12 @@ class Slackapi
   end
 
   def self.getAllUsers()
-    uri = URI.parse("https://slack.com/api/users.list")
+    url = URI.parse("https://slack.com/api/users.list")
     params = {"token" => ENV["SLACK_ACCESS_TOKEN"]}
     headers = {"Authorization" => "Bearer #{ENV["SLACK_ACCESS_TOKEN"]}"}
-    response = Net::HTTP.post_form(uri, params, headers)
+
+    http = Net::HTTP.new(url.host, url.port)
+    response = http.post(url.path, params.to_json, headers)
     if JSON.load(response.body)["error"]
       return nil
     else
