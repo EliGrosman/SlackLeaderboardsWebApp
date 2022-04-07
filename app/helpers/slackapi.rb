@@ -23,7 +23,7 @@ class Slackapi
   end
 
   def self.getAllUsers()
-    url = URI.parse("https://slack.com/api/users.list")
+    uri = URI.parse("https://slack.com/api/users.list")
 
     res = Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
       req = Net::HTTP::Get.new(uri)
