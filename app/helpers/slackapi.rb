@@ -2,8 +2,9 @@ class Slackapi
 
   def self.getRealName(userid)
     uri = URI.parse("https://slack.com/api/users.info")
-    params = {"token" => ENV["SLACK_ACCESS_TOKEN"], "user" => userid}
-    response = Net::HTTP.post_form(uri, params)
+    params = {"user" => userid}
+    headers = {"Authorization" => "Bearer #{ENV["SLACK_ACCESS_TOKEN"]}"}
+    response = Net::HTTP.post_form(uri, params, headers)
     if JSON.load(response.body)["error"]
       return nil
     else
@@ -15,7 +16,8 @@ class Slackapi
   def self.getAllUsers()
     uri = URI.parse("https://slack.com/api/users.list")
     params = {"token" => ENV["SLACK_ACCESS_TOKEN"]}
-    response = Net::HTTP.post_form(uri, params)
+    headers = {"Authorization" => "Bearer #{ENV["SLACK_ACCESS_TOKEN"]}"}
+    response = Net::HTTP.post_form(uri, params, headers)
     if JSON.load(response.body)["error"]
       return nil
     else
