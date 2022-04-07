@@ -7,6 +7,7 @@ class Slackapi
 
     http = Net::HTTP.new(url.host, url.port)
     response = http.post(url.path, params.to_json, headers)
+    puts(response)
     if JSON.load(response.body)["error"]
       return nil
     else
